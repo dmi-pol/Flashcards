@@ -23,34 +23,11 @@ async function processQuizFile(filePath) {
       answers.push(answer);
     }
 
-    console.log('Вопросы:', questions);
-    console.log('Ответы:', answers);
-    
     return { questions, answers };
   } catch (error) {
     console.error('Ошибка при чтении файла:', error);
   }
 }
-
-// Запускаем функцию для обработки файла
-processQuizFile('./topics/nighthawk_flashcard_data.txt');
-//тут мы 
-const questionObjects = [];
-
-for (let i = 0; i < questionsArray.length; i++) {
-  const questions = questionsArray[i];
-  const answers = answersArray[i];
-  
-  // Создаем новый объект Question и добавляем его в массив
-  const question = new Question(questions, answers);
-  questionObjects.push(question);
-}
-
-// Выводим результат
-console.log(questionObjects);
-
-
-
 
 // Класс для вопроса
 class Question {
@@ -115,29 +92,27 @@ class Quiz {
   }
 }
 
+// Основная логика: создание объектов Question и запуск квиза
+async function runQuiz() {
+  const { questions, answers } = await processQuizFile('./topics/nighthawk_flashcard_data.txt');
 
+  if (!questions || !answers || questions.length !== answers.length) {
+    console.error('Ошибка: количество вопросов и ответов не совпадает или файл не был прочитан.');
+    return;
+  }
 
-// // вопросы
-// const questions = [
-//   new Question('Что является основным источником пищи для ночных ястребов? ', 'насекомые'),
-//   new Question('Ночные ястребы тесно связаны с ястребами! (да/нет)', 'нет'),
-//   new Question('Ночные ястребы вьют гнезда.(да/нет)', 'нет'),
-//   new Question('Бульбат - другое название обыкновенного ночного ястреба.(да/нет)', 'да'),
-//   new Question('Что является основным источником пищи выдры?', 'рыба'),
-//   new Question('Верно или нет? Выдры большую часть времени проводят на суше.', 'верно'),
-//   new Question('Сколько существует видов выдр?', '13'),
-//   new Question('Верно или нет? Выдры родом из Австралии.', 'нет'),
-//   new Question('Верно или нет? Выдры изготавливают и используют инструменты.', 'верно'),
-//   new Question('Какова средняя продолжительность жизни выдры в дикой природе?', '10'),
-//   new Question('Являются ли еноты травоядными, плотоядными или всеядными?', 'всеядными'),
-//   new Question('Верно или нет? Еноты ведут ночной образ жизни.', 'верно'),
-//   new Question('Верно или нет? Еноты впадают в спячку.', 'нет'),
-//   new Question('Верно или нет? Еноты могут бегать со скоростью до 25 км в час.', 'верно'),
-//   new Question('Верно или нет? Еноты любят плавать!', 'нет'),
-//   new Question('Верно или нет? Свое потомство самка кормит 24 раза в день.', 'верно'),
-//   new Question('Верно или нет? Еноты – отдаленные родственники медведей.', 'верно'),
-// ];
+  const questionObjects = [];
 
-// Создаём квиз и запускаем его
-const quiz = new Quiz(questions);
-quiz.start();
+  // Создаем объекты Question
+  for (let i = 0; i < questions.length; i++) {
+    const question = new Question(questions[i], answers[i]);
+    questionObjects.push(question);
+  }
+
+  // Запускаем квиз
+  const quiz = new Quiz(questionObjects);
+  quiz.start();
+}
+
+// Запускаем квиз
+runQuiz();
