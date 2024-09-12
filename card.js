@@ -1,57 +1,58 @@
 const fs = require("fs").promises;
 const inquirer = require("inquirer");
 const { EOL } = require("os");
-// const func = async () => {
-//   const path = "./topics/";
-//   const files = await fs.readdir(path);
 
-//   console.log(files);
-
-// console.log(filesPath)
-// }
-
-// func();
 // ------------------------------------------------------------
-class Card {
+class CardQuestion {
 
-    static readeFileFunc() {
+    static async readeFileFunc() {
 try{
-
+    const pathQuest = "./topics/";
+    const files1 = await fs.readdir(pathQuest);
+    const readQuest = await fs.readFile(pathQuest + files1[0], "utf8");
+    const newArr1 = readQuest.split('\n');
+    return newArr1
+   
 }
-
 catch (error) {
     console.error("Ошибка при чтении файлов:", error);
   }
-
-
-
-
-
     }
 }
 // --------------------------------------------------
-(async () => {
-  try {
-    const path = "./topics/";
-    const files = await fs.readdir(path);
-    const readFile = await fs.readFile(path + files[0], "utf8");
 
-    const newArr = readFile.split('\n')
-    
-    // const arrQuest = readFile.split('\n').map((line => line.trim())).filter(line => line !== '');
-        console.log(newArr);
-    // };
-    
+class CardAnswer {
 
+    static async readeFileFunc() {
+try{
+    
+    const pathAnswer = "./answer/";
+    const files2 = await fs.readdir(pathAnswer);
+    const readAnswer = await fs.readFile(pathAnswer + files2[0], "utf8");
+    const newArr2 = readAnswer.split('\n');
+    return newArr2
+}
+catch (error) {
+    console.error("Ошибка при чтении файлов:", error);
+  }
+    }
+}
+
+(async ()=> {
+
+    try{
+    CardQuestion.readeFileFunc();
+    CardAnswer.readeFileFunc();
+    
     inquirer
       .prompt([
-        { type: "input", name: "username", message: "Введи имя:" },
+        { type: "input", name: "username", message: "Квиз Квиз Квиз !" },
 
         { type: "quest", name: "quest", message: "WHAT the fuck is going on?" },
         {
           type: "list",
           name: "bonuses",
-          message: "Выберите тему Квиза",
+          message: "Выбери тему",
           choices: [
             { name: 'Орлы', value: 1 },
             { name: 'Выдры', value: 2 },
@@ -61,13 +62,13 @@ catch (error) {
         {
           type: "list",
           name: "punishment",
-          message: "Вопрос про орла 1",
+          message: `${newArr1[0]}`,
           choices: [
-            { name: "Писать неделю на промисах", damage: 10 },
-            { name: "Писать неделю рекурсию с регуляркой", damage: 20 },
-            { name: "Писать только левой рукой", damage: 5 },
+            { name: "пончики", value: 2 },
+            { name: "насекомые", value: 1 },
+            { name: "Писать только левой рукой", value: 3 },
           ],
-          when: (answers) => answers.bonuses = 1,
+          when: (answers) => answers.bonuses > 1,
         },
         {
             type: "list",
@@ -97,9 +98,8 @@ catch (error) {
         //   message: "Выбери файл из списка:",
         //   choices: fileChoices,
         // },
-      ])
-      .then((answers) => console.log(answers));
-  } catch (error) {
-    console.error("Ошибка при чтении файлов:", error);
-  }
-})();
+      ]).then((answers) => console.log(answers));
+    } catch (error) {
+        console.log("errorr")
+    }
+})
