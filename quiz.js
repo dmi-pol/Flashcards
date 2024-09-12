@@ -34,6 +34,22 @@ async function processQuizFile(filePath) {
 
 // Запускаем функцию для обработки файла
 processQuizFile('./topics/nighthawk_flashcard_data.txt');
+//тут мы 
+const questionObjects = [];
+
+for (let i = 0; i < questionsArray.length; i++) {
+  const questions = questionsArray[i];
+  const answers = answersArray[i];
+  
+  // Создаем новый объект Question и добавляем его в массив
+  const question = new Question(questions, answers);
+  questionObjects.push(question);
+}
+
+// Выводим результат
+console.log(questionObjects);
+
+
 
 
 // Класс для вопроса
@@ -98,6 +114,8 @@ class Quiz {
     this.rl.close();
   }
 }
+
+
 
 // // вопросы
 // const questions = [
