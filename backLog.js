@@ -1,5 +1,7 @@
 const readline = require('readline');
 const fs = require('fs').promises;
+const Question = require('./question');
+const inquirer = require('inquirer');
 
 // -----------------------------------------------------------------------------------------
 // Функция для обработки файла
@@ -95,7 +97,23 @@ class Quiz {
 // -----------------------------------------------------------------------------------------
 // Основная логика: создание объектов Question и запуск квиза
 async function runQuiz() {
-  const { questions, answers } = await processQuizFile('./topics/nighthawk_flashcard_data.txt');
+  const directoryPath = './topics';
+  const files = await fs.readdir(directoryPath);
+
+  const fileChoices = files.map((file) => ({ name: file, value: file }));
+
+ 
+ const userChose = await inquirer
+    .prompt([
+       {
+        type: 'list',
+        name: 'file',
+        message: 'Выбери файл из списка:',
+        choices: fileChoices,
+      },
+    ])
+
+  const { questions, answers } = await processQuizFile(`./topics/${userChose.file}`);
 
   if (!questions || !answers || questions.length !== answers.length) {
     console.error('Ошибка: количество вопросов и ответов не совпадает или файл не был прочитан.');
@@ -114,6 +132,6 @@ async function runQuiz() {
   const quiz = new Quiz(questionObjects);
   quiz.start();
 }
-
+// -----------------------------------------------------------------------------------------
 // Запускаем квиз
 runQuiz();
