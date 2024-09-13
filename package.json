@@ -1,15 +1,17 @@
 {
   "name": "flashcards",
   "version": "1.0.0",
-  "description": "",
-  "main": "runner.js",
+  "description": "Quiz app for relaxing",
+  "main": "quiz.js",
   "scripts": {
+    "start": "node ./quiz",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Phase1.1 team",
   "license": "ISC",
   "dependencies": {
+    "inquirer": "^8.2.6",
     "readline-sync": "^1.4.10"
   },
   "devDependencies": {
