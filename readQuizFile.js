@@ -23,6 +23,8 @@ async function processQuizFile(filePath) {
       answers.push(answer);
     }
 
+// console.log({ questions, answers })
+
     return { questions, answers };
   } catch (error) {
     console.error('Ошибка при чтении файла:', error);
